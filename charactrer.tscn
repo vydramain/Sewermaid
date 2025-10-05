@@ -259,7 +259,7 @@ debug_color = Color(0.978924, 0, 0.3960697, 0.41960785)
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 position = Vector2(0, -8)
 emitting = false
-amount = 32
+amount = 64
 texture = ExtResource("3_rbjh3")
 lifetime = 0.5
 one_shot = true

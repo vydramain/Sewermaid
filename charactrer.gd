@@ -98,7 +98,7 @@ func detect_controller_type() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if attacking or defencing:
+	if attacking or defencing or hp == 0:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 	else:
 		var input_dir = get_input_direction()
@@ -275,28 +275,36 @@ func _on_animation_finished(anim_name: String) -> void:
 
 # --- ANIMATION NOTIFIES ---
 func _enable_middle_hitbox() -> void:
-	hurt_box_collision_middle.disabled = false
+	if hp > 0:
+		hurt_box_collision_middle.disabled = false
 
 func _disable_middle_hitbox() -> void:
-	hurt_box_collision_middle.disabled = true
+	if hp > 0:
+		hurt_box_collision_middle.disabled = true
 
 func _enable_low_hitbox() -> void:
-	hurt_box_collision_low.disabled = false
+	if hp > 0:
+		hurt_box_collision_low.disabled = false
 
 func _disable_low_hitbox() -> void:
-	hurt_box_collision_low.disabled = true
+	if hp > 0:
+		hurt_box_collision_low.disabled = true
 
 func _enable_middle_hurtbox() -> void:
-	hit_box_collision_middle.disabled = false
+	if hp > 0:
+		hit_box_collision_middle.disabled = false
 
 func _disable_middle_hurtbox() -> void:
-	hit_box_collision_middle.disabled = true
+	if hp > 0:
+		hit_box_collision_middle.disabled = true
 
 func _enable_low_hurtbox() -> void:
-	hit_box_collision_low.disabled = false
+	if hp > 0:
+		hit_box_collision_low.disabled = false
 
 func _disable_low_hurtbox() -> void:
-	hit_box_collision_low.disabled = true
+	if hp > 0:
+		hit_box_collision_low.disabled = true
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	hp -= 10
@@ -304,13 +312,17 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 	_audio_player.stream = sound_impact
 	_audio_player.play()
 	
+	_audio_player.stream = sound_death
+	_audio_player.play()
+	
 	if hp <= 0:
-		hp = 0
 		_audio_player.stream = sound_death
 		_audio_player.play()
-
-		if winner_script != null and winner_script.has_method("set_game_over"):
+		if hp == 0 and winner_script != null and winner_script.has_method("set_game_over"):
 			winner_script.set_game_over(true, character_name)
+			hit_box_collision_middle.disabled = true
+			hit_box_collision_low.disabled = true
+			hit_box_collision_middle.disabled = true
 	
 	if facing_right == true:
 		particles.direction.x = -1
@@ -318,3 +330,7 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 		particles.direction.x = 1
 	particles.emitting = true
 	particles.emitting = false
+
+
+func _on_hitbox_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.
