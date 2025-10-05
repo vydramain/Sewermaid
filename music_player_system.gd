@@ -12,7 +12,7 @@ const next_state = {
 
 const events_to_states = {
 	"arena": "pp_cw_amen10_160",
-	"danger_arena": "pp_cw_amen10_160",
+	"danger_arena": "pa_cw_amen10_160",
 }
 
 var audio_player: AudioStreamPlayer = null
@@ -21,9 +21,9 @@ var state: String = "arena"
 
 func _ready() -> void:
 	audio_player = AudioStreamPlayer.new()
-	audio_player = AudioStreamPlayer.new()
 	audio_player.stream = dict.get(state, dict.get("pp_cw_amen10_160"))
 	audio_player.autoplay = true
+	audio_player.volume_db = -6.0  # ~50% volume
 	add_child(audio_player)
 
 func _process(delta: float) -> void:

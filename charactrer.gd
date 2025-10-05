@@ -1,5 +1,9 @@
 extends CharacterBody2D
 
+@onready var sound_death = preload("res://pp_death.ogg")
+@onready var sound_impact = preload("res://pp_impact.ogg")
+@onready var sound_punch = preload("res://pp_punch.mp3")
+
 @onready var sprite = $SpriteBox
 @onready var animation_player = $SpriteBox/AnimationPlayer
 
@@ -25,6 +29,8 @@ extends CharacterBody2D
 
 var attacking: bool = false
 var facing_right: bool = true
+var _low_hp_triggered: bool = false
+var _audio_player: AudioStreamPlayer
 
 # Track previous button states for just_pressed detection
 var _previous_button_states = {}
@@ -47,6 +53,9 @@ func _ready() -> void:
 	hurt_box_collision_low.disabled = true
 	hurt_box_collision_middle.disabled = true
 	animation_player.animation_finished.connect(_on_animation_finished)
+	
+	_audio_player = AudioStreamPlayer.new()
+	add_child(_audio_player)
 	
 	# Set initial facing direction
 	facing_right = start_facing_right
@@ -104,6 +113,21 @@ func _physics_process(delta: float) -> void:
 			start_attack(ACTIONS["LOW_KICK"])
 	
 	move_and_slide()
+	_check_low_hp()
+	
+	if hp == 0: 
+		facing_right = not facing_right
+		sprite.scale.x *= -1
+
+
+func _check_low_hp() -> void:
+	if hp < 40 and not _low_hp_triggered:
+		_low_hp_triggered = true
+		_on_low_hp()
+
+func _on_low_hp() -> void:
+	if MUSIC_PLAYER_SYSTEM:
+		MUSIC_PLAYER_SYSTEM.play_next("danger_arena")
 
 
 func flip_direction() -> void:
@@ -205,6 +229,8 @@ func start_attack(anim_name: String) -> void:
 		attacking = true
 	
 	animation_player.play(anim_name)
+	_audio_player.stream = sound_punch
+	_audio_player.play()
 
 
 func _on_animation_finished(anim_name: String) -> void:
@@ -232,5 +258,13 @@ func _disable_low_hitbox() -> void:
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	hp -= 10
 	
-	if winner_script != null and winner_script.has_method("set_game_over") == true and hp == 0:
-		winner_script.set_game_over(true, character_name)
+	_audio_player.stream = sound_impact
+	_audio_player.play()
+	
+	if hp <= 0:
+		hp = 0
+		_audio_player.stream = sound_death
+		_audio_player.play()
+
+		if winner_script != null and winner_script.has_method("set_game_over"):
+			winner_script.set_game_over(true, character_name)
