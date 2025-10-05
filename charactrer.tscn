@@ -77,10 +77,10 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
-"method": &"_disable_hurtbox"
+"method": &"_disable_low_hurtbox"
 }, {
 "args": [],
-"method": &"_enable_hurtbox"
+"method": &"_enable_low_hurtbox"
 }]
 }
 
@@ -141,10 +141,10 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
-"method": &"_disable_hurtbox"
+"method": &"_disable_middle_hurtbox"
 }, {
 "args": [],
-"method": &"_enable_hurtbox"
+"method": &"_enable_middle_hurtbox"
 }]
 }
 
@@ -196,7 +196,7 @@ height = 44.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rbjh3"]
 radius = 4.0
-height = 44.0
+height = 22.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s24tm"]
 radius = 1.0
@@ -230,7 +230,13 @@ shape = SubResource("CapsuleShape2D_ehx2i")
 collision_layer = 8
 collision_mask = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="MiddleCollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -11)
+shape = SubResource("CapsuleShape2D_rbjh3")
+debug_color = Color(0.83038616, 0.3782731, 0.2980959, 0.41960785)
+
+[node name="LowCollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, 11)
 shape = SubResource("CapsuleShape2D_rbjh3")
 debug_color = Color(0.83038616, 0.3782731, 0.2980959, 0.41960785)
 

@@ -31,8 +31,8 @@ b = Vector2(370, 200)
 script = ExtResource("1_hxwao")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-offset = Vector2(160, 45)
-transform = Transform2D(1, 0, 0, 1, 160, 45)
+offset = Vector2(160, 50)
+transform = Transform2D(1, 0, 0, 1, 160, 50)
 
 [node name="ParallaxForestBackground" type="ParallaxLayer" parent="ParallaxBackground"]
 position = Vector2(0, 20)
@@ -67,7 +67,7 @@ texture = ExtResource("3_ic3xi")
 [node name="SewerForeground" type="Sprite2D" parent="."]
 texture_filter = 1
 position = Vector2(160, 70)
-scale = Vector2(4, 4)
+scale = Vector2(4.4, 4.4)
 texture = ExtResource("4_v45da")
 
 [node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("character1", "character2")]
@@ -86,6 +86,7 @@ position = Vector2(20, 120)
 scale = Vector2(3, 3)
 winner_script = NodePath("../CanvasLayer/WinnerScreen")
 character_name = "Poop"
+controller_device = 2
 
 [node name="Poop" parent="." node_paths=PackedStringArray("winner_script") instance=ExtResource("5_v45da")]
 position = Vector2(270, 120)

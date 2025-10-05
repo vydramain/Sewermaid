@@ -23,7 +23,7 @@ func _ready() -> void:
 	audio_player = AudioStreamPlayer.new()
 	audio_player.stream = dict.get(state, dict.get("pp_cw_amen10_160"))
 	audio_player.autoplay = true
-	audio_player.volume_db = -6.0  # ~50% volume
+	audio_player.volume_db = -8.0  # ~50% volume
 	add_child(audio_player)
 
 func _process(delta: float) -> void:

@@ -8,15 +8,16 @@ extends CharacterBody2D
 @onready var animation_player = $SpriteBox/AnimationPlayer
 
 @onready var collision = $CollisionShape2D
-@onready var hit_box_collision = $Hitbox/CollisionShape2D
+@onready var hit_box_collision_middle = $Hitbox/MiddleCollisionShape2D
+@onready var hit_box_collision_low = $Hitbox/LowCollisionShape2D
 @onready var hurt_box_collision_low = $HurtBox/LowCollisionShape
 @onready var hurt_box_collision_middle = $HurtBox/MiddleCollisionShape
 
 @export var winner_script: Control
 
-@export var speed: float = 40.0
+@export var speed: float = 80.0
 @export var accel: float = 125.0
-@export var friction: float = 600.0
+@export var friction: float = 1500.0
 
 @export var hp: int = 100
 @export var character_name: String
@@ -56,8 +57,10 @@ func _ready() -> void:
 	hurt_box_collision_low.disabled = true
 	hurt_box_collision_middle.disabled = true
 	animation_player.animation_finished.connect(_on_animation_finished)
+	animation_player.set_speed_scale(3.0)
 	
 	_audio_player = AudioStreamPlayer.new()
+	_audio_player.volume_db = +4.0  # ~50% volume
 	add_child(_audio_player)
 	
 	# Set initial facing direction
@@ -66,7 +69,8 @@ func _ready() -> void:
 		# Flip sprite and collisions to face left
 		sprite.scale.x *= -1
 		collision.position.x *= -1
-		hit_box_collision.position.x *= -1
+		hit_box_collision_middle.position.x *= -1
+		hit_box_collision_low.position.x *= -1
 		hurt_box_collision_low.position.x *= -1
 		hurt_box_collision_middle.position.x *= -1
 	
@@ -143,7 +147,8 @@ func flip_direction() -> void:
 
 	# Mirror collision shapes
 	collision.position.x *= -1
-	hit_box_collision.position.x *= -1
+	hit_box_collision_middle.position.x *= -1
+	hit_box_collision_low.position.x *= -1
 	hurt_box_collision_low.position.x *= -1
 	hurt_box_collision_middle.position.x *= -1
 
@@ -274,11 +279,17 @@ func _enable_low_hitbox() -> void:
 func _disable_low_hitbox() -> void:
 	hurt_box_collision_low.disabled = true
 
-func _enable_hurtbox() -> void:
-	hit_box_collision.disabled = false
+func _enable_middle_hurtbox() -> void:
+	hit_box_collision_middle.disabled = false
 
-func _disable_hurtbox() -> void:
-	hit_box_collision.disabled = true
+func _disable_middle_hurtbox() -> void:
+	hit_box_collision_middle.disabled = true
+
+func _enable_low_hurtbox() -> void:
+	hit_box_collision_low.disabled = false
+
+func _disable_low_hurtbox() -> void:
+	hit_box_collision_low.disabled = true
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	hp -= 10
