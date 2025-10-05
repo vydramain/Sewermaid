@@ -28,6 +28,7 @@ extends CharacterBody2D
 @export var start_facing_right: bool = true  # Set initial direction character faces
 
 var attacking: bool = false
+var defencing: bool = false
 var facing_right: bool = true
 var _low_hp_triggered: bool = false
 var _audio_player: AudioStreamPlayer
@@ -37,7 +38,9 @@ var _previous_button_states = {}
 
 const ACTIONS = {
 	"LOW_KICK": "Low_Kick",
-	"MIDDLE_PUNCH": "Middle_Punch"
+	"MIDDLE_PUNCH": "Middle_Punch",
+	"LOW_SHIELD": "Low_Shield",
+	"MIDDLE_SHIELD": "Middle_Shield"
 }
 
 # Button mapping constants
@@ -87,7 +90,7 @@ func detect_controller_type() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if attacking:
+	if attacking or defencing:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 	else:
 		var input_dir = get_input_direction()
@@ -111,6 +114,10 @@ func _physics_process(delta: float) -> void:
 			start_attack(ACTIONS["MIDDLE_PUNCH"])
 		if is_button_just_pressed("button_cross"):
 			start_attack(ACTIONS["LOW_KICK"])
+		if is_button_just_pressed("button_circle"):
+			start_defence(ACTIONS["MIDDLE_SHIELD"])
+		if is_button_just_pressed("button_triangle"):
+			start_defence(ACTIONS["LOW_SHIELD"])
 	
 	move_and_slide()
 	_check_low_hp()
@@ -221,7 +228,15 @@ func get_joy_button_for_action(action: String) -> int:
 			return -1
 
 
-# --- ATTACK HANDLING ---
+
+func start_defence(anim_name: String) -> void:
+	if anim_name == ACTIONS["MIDDLE_SHIELD"]:
+		defencing = true
+	if anim_name == ACTIONS["LOW_SHIELD"]:
+		defencing = true
+	
+	animation_player.play(anim_name)
+
 func start_attack(anim_name: String) -> void:
 	if anim_name == ACTIONS["MIDDLE_PUNCH"]:
 		attacking = true
@@ -238,6 +253,10 @@ func _on_animation_finished(anim_name: String) -> void:
 		attacking = false
 	if anim_name == ACTIONS["LOW_KICK"]:
 		attacking = false
+	if anim_name == ACTIONS["MIDDLE_SHIELD"]:
+		defencing = false
+	if anim_name == ACTIONS["LOW_SHIELD"]:
+		defencing = false
 	
 	animation_player.play("Idle")
 
@@ -254,6 +273,12 @@ func _enable_low_hitbox() -> void:
 
 func _disable_low_hitbox() -> void:
 	hurt_box_collision_low.disabled = true
+
+func _enable_hurtbox() -> void:
+	hit_box_collision.disabled = false
+
+func _disable_hurtbox() -> void:
+	hit_box_collision.disabled = true
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	hp -= 10
