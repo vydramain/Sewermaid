@@ -1,0 +1,9 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bay43ribrsmu7"]
+
+[ext_resource type="FontFile" uid="uid://c68a8kjfjisnc" path="res://Bytesized-Regular.ttf" id="1_dbow2"]
+
+[resource]
+font = ExtResource("1_dbow2")
+font_size = 26
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)

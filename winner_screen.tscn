@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://din2yvh8x80wn"]
+[gd_scene load_steps=3 format=3 uid="uid://din2yvh8x80wn"]
 
 [ext_resource type="Script" uid="uid://cypfin42iwpt3" path="res://winner_screen.gd" id="1_1hha7"]
+[ext_resource type="LabelSettings" uid="uid://bay43ribrsmu7" path="res://pixel_label.tres" id="2_qol43"]
 
 [node name="WinnerScreen" type="Control"]
 layout_mode = 3
@@ -24,11 +25,14 @@ grow_vertical = 2
 alignment = 1
 
 [node name="WinnerLabel" type="Label" parent="VBoxContainer"]
+texture_filter = 1
 layout_mode = 2
+text = "sdfsd"
+label_settings = ExtResource("2_qol43")
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="TimerLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+label_settings = ExtResource("2_qol43")
 horizontal_alignment = 1
 vertical_alignment = 1
