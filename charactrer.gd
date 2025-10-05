@@ -90,8 +90,8 @@ func _physics_process(delta: float) -> void:
 			if input_dir.x != 0 and ((input_dir.x > 0 and not facing_right) or (input_dir.x < 0 and facing_right)):
 				flip_direction()
 	
-			if animation_player.current_animation != "Walk":
-				animation_player.play("Walk")
+			if animation_player.current_animation != "Moving":
+				animation_player.play("Moving")
 		else:
 			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 			if animation_player.current_animation != "Idle":

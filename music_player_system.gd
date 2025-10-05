@@ -2,14 +2,17 @@ extends Node
 
 const dict = {
 	"pp_cw_amen10_160": preload("res://pp_cw_amen10_160.ogg"),
+	"pa_cw_amen10_160": preload("res://pa_cw_amen10_160.ogg"),
 }
 
 const next_state = {
 	"pp_cw_amen10_160": "pp_cw_amen10_160",
+	"pa_cw_amen10_160": "pa_cw_amen10_160",
 }
 
 const events_to_states = {
 	"arena": "pp_cw_amen10_160",
+	"danger_arena": "pp_cw_amen10_160",
 }
 
 var audio_player: AudioStreamPlayer = null
