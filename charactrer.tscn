@@ -1,0 +1,170 @@
+[gd_scene load_steps=12 format=3 uid="uid://ch0qb6l11mndf"]
+
+[ext_resource type="Texture2D" uid="uid://cdyobknijedwt" path="res://Piss.png" id="1_c783h"]
+[ext_resource type="Script" uid="uid://c33vdws42nc8r" path="res://charactrer.gd" id="1_ehx2i"]
+
+[sub_resource type="Animation" id="Animation_c783h"]
+resource_name = "Idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_rbjh3"]
+resource_name = "Low_Kick"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 11]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.25, 0.75),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"_enable_low_hitbox"
+}, {
+"args": [],
+"method": &"_disable_low_hitbox"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_ehx2i"]
+resource_name = "Middle_Punch"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 7]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.25, 0.75),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"_enable_middle_hitbox"
+}, {
+"args": [],
+"method": &"_disable_middle_hitbox"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_6sw42"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s24tm"]
+_data = {
+&"Idle": SubResource("Animation_c783h"),
+&"Low_Kick": SubResource("Animation_rbjh3"),
+&"Middle_Punch": SubResource("Animation_ehx2i"),
+&"RESET": SubResource("Animation_6sw42")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ehx2i"]
+radius = 4.0
+height = 44.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rbjh3"]
+radius = 4.0
+height = 44.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s24tm"]
+radius = 1.0
+height = 4.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6sw42"]
+radius = 1.0
+height = 4.0
+
+[node name="Charactrer" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_ehx2i")
+
+[node name="SpriteBox" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_c783h")
+offset = Vector2(6, 0)
+hframes = 4
+vframes = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SpriteBox"]
+libraries = {
+&"": SubResource("AnimationLibrary_s24tm")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_ehx2i")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CapsuleShape2D_rbjh3")
+debug_color = Color(0.83038616, 0.3782731, 0.2980959, 0.41960785)
+
+[node name="HurtBox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 8
+
+[node name="MiddleCollisionShape" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(20, -9)
+shape = SubResource("CapsuleShape2D_s24tm")
+debug_color = Color(0.98039216, 0, 0.39607844, 0.41960785)
+
+[node name="LowCollisionShape" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(19, 22)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_6sw42")
+debug_color = Color(0.978924, 0, 0.3960697, 0.41960785)
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

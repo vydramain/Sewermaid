@@ -1,0 +1,129 @@
+[gd_scene load_steps=14 format=3 uid="uid://6vkct5x1ewon"]
+
+[ext_resource type="Texture2D" uid="uid://fy81hjip1l20" path="res://forest_background.png" id="1_300v3"]
+[ext_resource type="Texture2D" uid="uid://beatv3wcj6dnn" path="res://forest_frontend.png" id="2_v45da"]
+[ext_resource type="Texture2D" uid="uid://diux2a0qxu47l" path="res://fog.png" id="3_ic3xi"]
+[ext_resource type="Texture2D" uid="uid://be1fhrkus4lig" path="res://Sewer.png" id="4_v45da"]
+[ext_resource type="Script" uid="uid://bgxgjlv60n1ol" path="res://camera_2d.gd" id="5_mqtxy"]
+[ext_resource type="PackedScene" uid="uid://ch0qb6l11mndf" path="res://charactrer.tscn" id="5_v45da"]
+[ext_resource type="Texture2D" uid="uid://12gevaivi387" path="res://Poop.png" id="6_3yd3t"]
+[ext_resource type="PackedScene" uid="uid://cxyse0k4udoys" path="res://progress_bars.tscn" id="6_ic3xi"]
+[ext_resource type="PackedScene" uid="uid://din2yvh8x80wn" path="res://winner_screen.tscn" id="9_vom5e"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_v45da"]
+a = Vector2(370, 0)
+b = Vector2(370, 200)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ic3xi"]
+a = Vector2(-50, 0)
+b = Vector2(-50, 200)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_3yd3t"]
+a = Vector2(-50, 0)
+b = Vector2(370, 0)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_mqtxy"]
+a = Vector2(-50, 200)
+b = Vector2(370, 200)
+
+[node name="SewerArea" type="Node2D"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+offset = Vector2(160, 45)
+transform = Transform2D(1, 0, 0, 1, 160, 45)
+
+[node name="ParallaxForestBackground" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(0, 20)
+motion_scale = Vector2(0.2, 0.2)
+motion_mirroring = Vector2(320, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxForestBackground"]
+texture_filter = 1
+texture_repeat = 2
+texture = ExtResource("1_300v3")
+
+[node name="ParallaxForestForeground" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(0, 20)
+motion_scale = Vector2(0.1, 0.1)
+motion_mirroring = Vector2(320, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxForestForeground"]
+texture_filter = 1
+texture_repeat = 2
+texture = ExtResource("2_v45da")
+
+[node name="ParallaxSewerFog" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(0, 20)
+motion_scale = Vector2(0.05, 0.05)
+motion_mirroring = Vector2(320, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxSewerFog"]
+texture_filter = 1
+texture_repeat = 2
+texture = ExtResource("3_ic3xi")
+
+[node name="SewerForeground" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(160, 70)
+scale = Vector2(4, 4)
+texture = ExtResource("4_v45da")
+
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("character1", "character2")]
+position = Vector2(20, 120)
+scale = Vector2(3, 3)
+limit_left = -80
+limit_top = 0
+limit_right = 400
+limit_bottom = 200
+script = ExtResource("5_mqtxy")
+character1 = NodePath("../Piss")
+character2 = NodePath("../Poop")
+
+[node name="Piss" parent="." node_paths=PackedStringArray("winner_script") instance=ExtResource("5_v45da")]
+position = Vector2(20, 120)
+scale = Vector2(3, 3)
+winner_script = NodePath("../CanvasLayer/WinnerScreen")
+character_name = "Poop"
+
+[node name="Poop" parent="." node_paths=PackedStringArray("winner_script") instance=ExtResource("5_v45da")]
+position = Vector2(270, 120)
+scale = Vector2(3, 3)
+winner_script = NodePath("../CanvasLayer/WinnerScreen")
+character_name = "Piss"
+controller_device = 1
+start_facing_right = false
+
+[node name="SpriteBox" parent="Poop" index="0"]
+texture = ExtResource("6_3yd3t")
+
+[node name="Borders" type="StaticBody2D" parent="."]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders"]
+shape = SubResource("SegmentShape2D_v45da")
+debug_color = Color(0.12662402, 0.63510716, 0.36427546, 0.41960785)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Borders"]
+shape = SubResource("SegmentShape2D_ic3xi")
+debug_color = Color(0.1254902, 0.63529414, 0.3647059, 0.41960785)
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Borders"]
+shape = SubResource("SegmentShape2D_3yd3t")
+debug_color = Color(0.1254902, 0.63529414, 0.3647059, 0.41960785)
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Borders"]
+shape = SubResource("SegmentShape2D_mqtxy")
+debug_color = Color(0.1254902, 0.63529414, 0.3647059, 0.41960785)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ProgressBars" parent="CanvasLayer" node_paths=PackedStringArray("character1", "character2") instance=ExtResource("6_ic3xi")]
+size_flags_horizontal = 1
+character1 = NodePath("../../Piss")
+character2 = NodePath("../../Poop")
+
+[node name="WinnerScreen" parent="CanvasLayer" instance=ExtResource("9_vom5e")]
+
+[editable path="Piss"]
+[editable path="Poop"]
+[editable path="CanvasLayer/ProgressBars"]
