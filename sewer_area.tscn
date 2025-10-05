@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://6vkct5x1ewon"]
+[gd_scene load_steps=16 format=3 uid="uid://6vkct5x1ewon"]
 
 [ext_resource type="Texture2D" uid="uid://fy81hjip1l20" path="res://forest_background.png" id="1_300v3"]
 [ext_resource type="Script" uid="uid://j0isvubxi5bs" path="res://sewer_area.gd" id="1_hxwao"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://ch0qb6l11mndf" path="res://charactrer.tscn" id="5_v45da"]
 [ext_resource type="Texture2D" uid="uid://12gevaivi387" path="res://Poop.png" id="6_3yd3t"]
 [ext_resource type="PackedScene" uid="uid://cxyse0k4udoys" path="res://progress_bars.tscn" id="6_ic3xi"]
+[ext_resource type="Texture2D" uid="uid://b6vkj56qagvtp" path="res://poop_particle.png" id="9_10xsc"]
 [ext_resource type="PackedScene" uid="uid://din2yvh8x80wn" path="res://winner_screen.tscn" id="9_vom5e"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_v45da"]
@@ -98,6 +99,9 @@ start_facing_right = false
 
 [node name="SpriteBox" parent="Poop" index="0"]
 texture = ExtResource("6_3yd3t")
+
+[node name="CPUParticles2D" parent="Poop" index="4"]
+texture = ExtResource("9_10xsc")
 
 [node name="Borders" type="StaticBody2D" parent="."]
 collision_mask = 3

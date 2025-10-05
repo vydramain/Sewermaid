@@ -13,6 +13,8 @@ extends CharacterBody2D
 @onready var hurt_box_collision_low = $HurtBox/LowCollisionShape
 @onready var hurt_box_collision_middle = $HurtBox/MiddleCollisionShape
 
+@onready var particles = $CPUParticles2D
+
 @export var winner_script: Control
 
 @export var speed: float = 80.0
@@ -54,6 +56,8 @@ enum ControllerType {
 var controller_type: ControllerType = ControllerType.UNKNOWN
 
 func _ready() -> void:
+	particles.emitting = false
+	
 	hurt_box_collision_low.disabled = true
 	hurt_box_collision_middle.disabled = true
 	animation_player.animation_finished.connect(_on_animation_finished)
@@ -129,6 +133,9 @@ func _physics_process(delta: float) -> void:
 	if hp == 0: 
 		facing_right = not facing_right
 		sprite.scale.x *= -1
+		particles.direction.x = 0
+		particles.direction.y = -1
+		particles.emitting = true
 
 
 func _check_low_hp() -> void:
@@ -304,3 +311,10 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 
 		if winner_script != null and winner_script.has_method("set_game_over"):
 			winner_script.set_game_over(true, character_name)
+	
+	if facing_right == true:
+		particles.direction.x = -1
+	else:
+		particles.direction.x = 1
+	particles.emitting = true
+	particles.emitting = false
