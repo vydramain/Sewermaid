@@ -34,20 +34,18 @@ func _process(delta: float) -> void:
 	if target_character and owner_character:
 		var dir_to_target = target_character.global_position.x - owner_character.global_position.x
 		if abs(dir_to_target) > 10:
+			var was_facing_right = owner_character.facing_right
 			owner_character.facing_right = dir_to_target > 0
-			if owner_character.sprite.scale.x > 0 and not owner_character.facing_right:
+			
+			# Only flip if the facing direction actually changed
+			if was_facing_right != owner_character.facing_right:
+				# Flip sprite scale and box/collision positions to mirror (exact match to Character.flip_direction)
 				owner_character.sprite.scale.x *= -1
-				owner_character.hit_box_collision_low.scale.x *= -1
-				owner_character.hit_box_collision_middle.scale.x *= -1
-				owner_character.hurt_box_collision_low.scale.x *= -1
-				owner_character.hurt_box_collision_middle.scale.x *= -1
-			elif owner_character.sprite.scale.x < 0 and owner_character.facing_right:
-				owner_character.sprite.scale.x *= -1
-				owner_character.sprite.scale.x *= -1
-				owner_character.hit_box_collision_low.scale.x *= -1
-				owner_character.hit_box_collision_middle.scale.x *= -1
-				owner_character.hurt_box_collision_low.scale.x *= -1
-				owner_character.hurt_box_collision_middle.scale.x *= -1
+				owner_character.collision.position.x *= -1
+				owner_character.hit_box_collision_low.position.x *= -1
+				owner_character.hit_box_collision_middle.position.x *= -1
+				owner_character.hurt_box_collision_low.position.x *= -1
+				owner_character.hurt_box_collision_middle.position.x *= -1
 	
 	_decision_cooldown -= delta
 	if _action_duration > 0:

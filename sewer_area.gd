@@ -54,7 +54,7 @@ func setup_two_players() -> void:
 
 func setup_player_vs_ai() -> void:
 	# Player 1 uses controller 0
-	player1.set_controller_input(0)
+	player1.set_controller_input(1)
 	
 	# Player 2 is AI
 	player2.set_ai_input(player1, ai_difficulty, ai_aggression)
