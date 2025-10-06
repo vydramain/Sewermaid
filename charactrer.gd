@@ -64,7 +64,7 @@ func _ready() -> void:
 	animation_player.set_speed_scale(3.0)
 	
 	_audio_player = AudioStreamPlayer.new()
-	_audio_player.volume_db = +4.0  # ~50% volume
+	_audio_player.volume_db = +6.0  # ~50% volume
 	add_child(_audio_player)
 	
 	# Set initial facing direction
@@ -98,18 +98,18 @@ func detect_controller_type() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if attacking or defencing or hp == 0:
+	if attacking or defencing or hp <= 0:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 	else:
 		var input_dir = get_input_direction()
 		
 		if input_dir != Vector2.ZERO:
 			velocity = velocity.move_toward(speed * input_dir, accel * delta)
-	
+			
 			# flip direction
 			if input_dir.x != 0 and ((input_dir.x > 0 and not facing_right) or (input_dir.x < 0 and facing_right)):
 				flip_direction()
-	
+			
 			if animation_player.current_animation != "Moving":
 				animation_player.play("Moving")
 		else:
@@ -130,7 +130,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_check_low_hp()
 	
-	if hp == 0: 
+	if hp <= 0: 
 		facing_right = not facing_right
 		sprite.scale.x *= -1
 		particles.direction.x = 0
@@ -312,13 +312,10 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 	_audio_player.stream = sound_impact
 	_audio_player.play()
 	
-	_audio_player.stream = sound_death
-	_audio_player.play()
-	
 	if hp <= 0:
-		_audio_player.stream = sound_death
-		_audio_player.play()
 		if hp == 0 and winner_script != null and winner_script.has_method("set_game_over"):
+			_audio_player.stream = sound_death
+			_audio_player.play()
 			winner_script.set_game_over(true, character_name)
 			hit_box_collision_middle.disabled = true
 			hit_box_collision_low.disabled = true

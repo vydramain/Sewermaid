@@ -3,7 +3,7 @@ extends Control
 @onready var winner_label: Label = $VBoxContainer/WinnerLabel
 @onready var timer_label: Label = $VBoxContainer/TimerLabel
 
-@export var countdown_time: float = 9.0
+@export var countdown_time: float = 6.0
 @export var game_scene_path: String = "res://sewer_area.tscn"
 
 var time_remaining: float = 0.0

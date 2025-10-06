@@ -30,7 +30,7 @@ tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"times": PackedFloat32Array(0, 0.23333333, 0.5, 0.75),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [8, 9, 10, 11]
@@ -201,11 +201,11 @@ height = 22.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s24tm"]
 radius = 1.0
-height = 4.0
+height = 10.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6sw42"]
 radius = 1.0
-height = 4.0
+height = 8.000002
 
 [node name="Charactrer" type="CharacterBody2D"]
 collision_layer = 2
@@ -246,12 +246,13 @@ collision_layer = 4
 collision_mask = 8
 
 [node name="MiddleCollisionShape" type="CollisionShape2D" parent="HurtBox"]
-position = Vector2(20, -9)
+position = Vector2(15, -9)
+rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_s24tm")
 debug_color = Color(0.98039216, 0, 0.39607844, 0.41960785)
 
 [node name="LowCollisionShape" type="CollisionShape2D" parent="HurtBox"]
-position = Vector2(19, 22)
+position = Vector2(16, 22)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_6sw42")
 debug_color = Color(0.978924, 0, 0.3960697, 0.41960785)
