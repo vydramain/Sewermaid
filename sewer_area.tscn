@@ -87,14 +87,13 @@ position = Vector2(20, 120)
 scale = Vector2(3, 3)
 winner_script = NodePath("../CanvasLayer/WinnerScreen")
 character_name = "Poop"
-controller_device = 2
+controller_device = 1
 
 [node name="Poop" parent="." node_paths=PackedStringArray("winner_script") instance=ExtResource("5_v45da")]
 position = Vector2(270, 120)
 scale = Vector2(3, 3)
 winner_script = NodePath("../CanvasLayer/WinnerScreen")
 character_name = "Piss"
-controller_device = 1
 start_facing_right = false
 
 [node name="SpriteBox" parent="Poop" index="0"]

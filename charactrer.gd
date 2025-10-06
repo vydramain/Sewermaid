@@ -275,36 +275,28 @@ func _on_animation_finished(anim_name: String) -> void:
 
 # --- ANIMATION NOTIFIES ---
 func _enable_middle_hitbox() -> void:
-	if hp > 0:
-		hurt_box_collision_middle.disabled = false
+	hurt_box_collision_middle.disabled = false
 
 func _disable_middle_hitbox() -> void:
-	if hp > 0:
-		hurt_box_collision_middle.disabled = true
+	hurt_box_collision_middle.disabled = true
 
 func _enable_low_hitbox() -> void:
-	if hp > 0:
-		hurt_box_collision_low.disabled = false
+	hurt_box_collision_low.disabled = false
 
 func _disable_low_hitbox() -> void:
-	if hp > 0:
-		hurt_box_collision_low.disabled = true
+	hurt_box_collision_low.disabled = true
 
 func _enable_middle_hurtbox() -> void:
-	if hp > 0:
-		hit_box_collision_middle.disabled = false
+	hit_box_collision_middle.disabled = false
 
 func _disable_middle_hurtbox() -> void:
-	if hp > 0:
-		hit_box_collision_middle.disabled = true
+	hit_box_collision_middle.disabled = true
 
 func _enable_low_hurtbox() -> void:
-	if hp > 0:
-		hit_box_collision_low.disabled = false
+	hit_box_collision_low.disabled = false
 
 func _disable_low_hurtbox() -> void:
-	if hp > 0:
-		hit_box_collision_low.disabled = true
+	hit_box_collision_low.disabled = true
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	hp -= 10
