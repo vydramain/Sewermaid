@@ -1,0 +1,68 @@
+[gd_scene load_steps=5 format=3 uid="uid://n73pchww1adc"]
+
+[ext_resource type="FontFile" uid="uid://def20ua3dv3c1" path="res://Jersey10-Regular.ttf" id="1_lti8b"]
+[ext_resource type="Script" uid="uid://cm0h5ed3ugmuk" path="res://menu.gd" id="2_mae5d"]
+[ext_resource type="Texture2D" uid="uid://fy81hjip1l20" path="res://forest_background.png" id="2_ouk20"]
+
+[sub_resource type="Theme" id="Theme_ouk20"]
+default_font = ExtResource("1_lti8b")
+default_font_size = 16
+
+[node name="Menu" type="Control"]
+layout_direction = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_ouk20")
+script = ExtResource("2_mae5d")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ouk20")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.69411767)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -49.0
+offset_top = -25.0
+offset_right = 49.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerVsPlayer" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Player vs Player"
+
+[node name="PlayerVsAI" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Player vs AI"
+
+[node name="AIvsAI" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "AI vs AI"
+
+[connection signal="pressed" from="VBoxContainer/PlayerVsPlayer" to="." method="_on_player_vs_player_pressed"]
+[connection signal="pressed" from="VBoxContainer/PlayerVsAI" to="." method="_on_player_vs_ai_pressed"]
+[connection signal="pressed" from="VBoxContainer/AIvsAI" to="." method="_on_a_ivs_ai_pressed"]

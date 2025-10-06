@@ -1,9 +1,7 @@
-extends Node2D
+extends Node
 
-@onready var player1 = $Piss
-@onready var player2 = $Poop
-
-@onready var menu = $CanvasLayer/Menu
+@onready var player1 = $Player1  # Your Character node
+@onready var player2 = $Player2  # Your Character node
 
 enum GameMode {
 	TWO_PLAYERS,
@@ -16,22 +14,6 @@ enum GameMode {
 @export var ai_aggression: float = 0.6
 
 func _ready() -> void:
-	if MUSIC_PLAYER_SYSTEM:
-		MUSIC_PLAYER_SYSTEM.play_next('arena')
-
-func run_p_vs_p() -> void:
-	game_mode = GameMode.TWO_PLAYERS
-	menu.visible = false
-	setup_game()
-
-func run_p_vs_ai() -> void:
-	game_mode = GameMode.PLAYER_VS_AI
-	menu.visible = false
-	setup_game()
-
-func run_ai_vs_ai() -> void:
-	game_mode = GameMode.AI_VS_AI
-	menu.visible = false
 	setup_game()
 
 func setup_game() -> void:

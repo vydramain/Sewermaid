@@ -1,3 +1,4 @@
+# Character.gd (Refactored)
 extends CharacterBody2D
 
 @onready var sound_death = preload("res://pp_death.ogg")
@@ -8,12 +9,13 @@ extends CharacterBody2D
 @onready var animation_player = $SpriteBox/AnimationPlayer
 
 @onready var collision = $CollisionShape2D
-@onready var hit_box_collision_middle = $Hitbox/MiddleCollisionShape2D
 @onready var hit_box_collision_low = $Hitbox/LowCollisionShape2D
+@onready var hit_box_collision_middle = $Hitbox/MiddleCollisionShape2D
 @onready var hurt_box_collision_low = $HurtBox/LowCollisionShape
 @onready var hurt_box_collision_middle = $HurtBox/MiddleCollisionShape
 
 @onready var particles = $CPUParticles2D
+@onready var particles_trails = $CPUTrailsParticles2D
 
 @export var winner_script: Control
 
@@ -24,36 +26,26 @@ extends CharacterBody2D
 @export var hp: int = 100
 @export var character_name: String
 
-# Export the controller device ID
-@export var controller_device: int = 0  # 0 = Player 1, 1 = Player 2, etc.
-
 # Export starting direction
-@export var start_facing_right: bool = true  # Set initial direction character faces
+@export var start_facing_right: bool = true
+
+# INPUT PROVIDER - Set this in the scene!
+var input_provider: InputProvider = null
 
 var attacking: bool = false
 var defencing: bool = false
+var sliding: bool = false
 var facing_right: bool = true
 var _low_hp_triggered: bool = false
 var _audio_player: AudioStreamPlayer
-
-# Track previous button states for just_pressed detection
-var _previous_button_states = {}
 
 const ACTIONS = {
 	"LOW_KICK": "Low_Kick",
 	"MIDDLE_PUNCH": "Middle_Punch",
 	"LOW_SHIELD": "Low_Shield",
-	"MIDDLE_SHIELD": "Middle_Shield"
+	"MIDDLE_SHIELD": "Middle_Shield",
+	"SLIDE": "Slide"
 }
-
-# Button mapping constants
-enum ControllerType {
-	UNKNOWN,
-	PLAYSTATION,
-	XBOX
-}
-
-var controller_type: ControllerType = ControllerType.UNKNOWN
 
 func _ready() -> void:
 	particles.emitting = false
@@ -64,13 +56,12 @@ func _ready() -> void:
 	animation_player.set_speed_scale(3.0)
 	
 	_audio_player = AudioStreamPlayer.new()
-	_audio_player.volume_db = +6.0  # ~50% volume
+	_audio_player.volume_db = +6.0
 	add_child(_audio_player)
 	
 	# Set initial facing direction
 	facing_right = start_facing_right
 	if not start_facing_right:
-		# Flip sprite and collisions to face left
 		sprite.scale.x *= -1
 		collision.position.x *= -1
 		hit_box_collision_middle.position.x *= -1
@@ -78,27 +69,47 @@ func _ready() -> void:
 		hurt_box_collision_low.position.x *= -1
 		hurt_box_collision_middle.position.x *= -1
 	
-	# Detect controller type
-	detect_controller_type()
+	# If no input provider is set, create a default controller provider
+	if input_provider == null:
+		print("Warning: No input provider set for %s, creating default controller" % character_name)
+		set_controller_input(0)
 
-
-func detect_controller_type() -> void:
-	var joy_name = Input.get_joy_name(controller_device).to_lower()
+# Method to set controller input
+func set_controller_input(device_id: int = 0) -> void:
+	if input_provider:
+		input_provider.queue_free()
 	
-	if joy_name.contains("playstation") or joy_name.contains("ps4") or joy_name.contains("ps5") or joy_name.contains("dualshock") or joy_name.contains("dualsense"):
-		controller_type = ControllerType.PLAYSTATION
-		print("Player %d: PlayStation controller detected" % (controller_device + 1))
-	elif joy_name.contains("xbox") or joy_name.contains("xinput"):
-		controller_type = ControllerType.XBOX
-		print("Player %d: Xbox controller detected" % (controller_device + 1))
-	else:
-		# Default to Xbox layout as it's more common
-		controller_type = ControllerType.XBOX
-		print("Player %d: Unknown controller, using Xbox layout" % (controller_device + 1))
+	var controller = ControllerInputProvider.new()
+	controller.controller_device = device_id
+	add_child(controller)
+	input_provider = controller
+	print("%s: Using controller %d" % [character_name, device_id])
 
+# Method to set AI input
+func set_ai_input(target: CharacterBody2D, difficulty: float = 0.5, aggression: float = 0.5) -> void:
+	if input_provider:
+		input_provider.queue_free()
+	
+	var ai = AIInputProvider.new()
+	ai.ai_difficulty = difficulty
+	ai.aggression = aggression
+	add_child(ai)
+	ai.set_target(target)
+	ai.set_character(self)
+	input_provider = ai
+	print("%s: Using AI (Difficulty: %.1f, Aggression: %.1f)" % [character_name, difficulty, aggression])
+
+# Method to set custom input provider
+func set_input_provider(provider: InputProvider) -> void:
+	if input_provider:
+		input_provider.queue_free()
+	
+	add_child(provider)
+	input_provider = provider
+	print("%s: Using %s" % [character_name, provider.get_provider_name()])
 
 func _physics_process(delta: float) -> void:
-	if attacking or defencing or hp <= 0:
+	if attacking or defencing or sliding or hp <= 0:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 	else:
 		var input_dir = get_input_direction()
@@ -117,15 +128,26 @@ func _physics_process(delta: float) -> void:
 			if animation_player.current_animation != "Idle":
 				animation_player.play("Idle")
 	
-		# Device-specific input for attacks
-		if is_button_just_pressed("button_square"):
-			start_attack(ACTIONS["MIDDLE_PUNCH"])
-		if is_button_just_pressed("button_cross"):
-			start_attack(ACTIONS["LOW_KICK"])
-		if is_button_just_pressed("button_circle"):
-			start_defence(ACTIONS["MIDDLE_SHIELD"])
-		if is_button_just_pressed("button_triangle"):
-			start_defence(ACTIONS["LOW_SHIELD"])
+		# Check for attacks using input provider
+		if input_provider:
+			if input_provider.is_action_just_pressed("button_square"):
+				start_attack(ACTIONS["MIDDLE_PUNCH"])
+			if input_provider.is_action_just_pressed("button_cross"):
+				start_attack(ACTIONS["LOW_KICK"])
+			if input_provider.is_action_just_pressed("button_circle"):
+				start_defence(ACTIONS["MIDDLE_SHIELD"])
+			if input_provider.is_action_just_pressed("button_triangle"):
+				start_defence(ACTIONS["LOW_SHIELD"])
+			if input_provider.is_action_just_pressed("button_l2"): 
+				if facing_right:
+					slide(delta, Vector2(-1, 0), ACTIONS["SLIDE"])
+				else: 
+					slide(delta, Vector2(1, 0), ACTIONS["SLIDE"])
+			if input_provider.is_action_just_pressed("button_r2"): 
+				if facing_right:
+					slide(delta, Vector2(1, 0), ACTIONS["SLIDE"])
+				else: 
+					slide(delta, Vector2(-1, 0), ACTIONS["SLIDE"])
 	
 	move_and_slide()
 	_check_low_hp()
@@ -137,6 +159,10 @@ func _physics_process(delta: float) -> void:
 		particles.direction.y = -1
 		particles.emitting = true
 
+func get_input_direction() -> Vector2:
+	if input_provider:
+		return input_provider.get_movement_direction()
+	return Vector2.ZERO
 
 func _check_low_hp() -> void:
 	if hp < 40 and not _low_hp_triggered:
@@ -147,98 +173,41 @@ func _on_low_hp() -> void:
 	if MUSIC_PLAYER_SYSTEM:
 		MUSIC_PLAYER_SYSTEM.play_next("danger_arena")
 
-
 func flip_direction() -> void:
 	facing_right = not facing_right
 	sprite.scale.x *= -1
-
-	# Mirror collision shapes
 	collision.position.x *= -1
 	hit_box_collision_middle.position.x *= -1
 	hit_box_collision_low.position.x *= -1
 	hurt_box_collision_low.position.x *= -1
 	hurt_box_collision_middle.position.x *= -1
 
-
-func get_input_direction() -> Vector2:
-	var input_dir: Vector2 = Vector2.ZERO
+func teleport(dir: Vector2, distance: float = 100.0):
+	if dir == Vector2.ZERO:
+		# If no input, teleport forward based on facing direction
+		dir = Vector2(1 if facing_right else -1, 0)
 	
-	# Get left stick horizontal axis
-	var axis_value = Input.get_joy_axis(controller_device, JOY_AXIS_LEFT_X)
+	global_position += dir.normalized() * distance
+
+func slide(delta: float, dir: Vector2, anim_name: String, distance: float = 100.0, duration: float = 0.6) -> void:
+	if anim_name == ACTIONS["SLIDE"]:
+		sliding = true
 	
-	# Apply deadzone
-	if abs(axis_value) > 0.2:
-		input_dir.x = axis_value
+	animation_player.play(anim_name)
 	
-	# Also support D-pad
-	if Input.is_joy_button_pressed(controller_device, JOY_BUTTON_DPAD_RIGHT):
-		input_dir.x = 1.0
-	elif Input.is_joy_button_pressed(controller_device, JOY_BUTTON_DPAD_LEFT):
-		input_dir.x = -1.0
+	if dir == Vector2.ZERO:
+		dir = Vector2(1 if facing_right else -1, 0)
 	
-	return input_dir.normalized()
-
-
-func is_button_just_pressed(action: String) -> bool:
-	var button = get_joy_button_for_action(action)
-	if button != -1:
-		var key = str(controller_device) + "_" + str(button)
-		var is_pressed = Input.is_joy_button_pressed(controller_device, button)
-		var was_pressed = _previous_button_states.get(key, false)
-		_previous_button_states[key] = is_pressed
-		return is_pressed and not was_pressed
-	return false
-
-
-func get_joy_button_for_action(action: String) -> int:
-	match action:
-		"button_square":
-			# PlayStation: Square (left face button)
-			# Xbox: X (left face button)
-			if controller_type == ControllerType.PLAYSTATION:
-				return JOY_BUTTON_X  # Square on PlayStation
-			else:  # Xbox or unknown
-				return JOY_BUTTON_X  # X on Xbox
-		
-		"button_cross":
-			# PlayStation: Cross (bottom face button)
-			# Xbox: A (bottom face button)
-			if controller_type == ControllerType.PLAYSTATION:
-				return JOY_BUTTON_A  # Cross on PlayStation
-			else:  # Xbox or unknown
-				return JOY_BUTTON_A  # A on Xbox
-		
-		"button_circle":
-			# PlayStation: Circle (right face button)
-			# Xbox: B (right face button)
-			if controller_type == ControllerType.PLAYSTATION:
-				return JOY_BUTTON_B  # Circle on PlayStation
-			else:  # Xbox or unknown
-				return JOY_BUTTON_B  # B on Xbox
-		
-		"button_triangle":
-			# PlayStation: Triangle (top face button)
-			# Xbox: Y (top face button)
-			if controller_type == ControllerType.PLAYSTATION:
-				return JOY_BUTTON_Y  # Triangle on PlayStation
-			else:  # Xbox or unknown
-				return JOY_BUTTON_Y  # Y on Xbox
-		
-		"button_l1":
-			return JOY_BUTTON_LEFT_SHOULDER
-		
-		"button_r1":
-			return JOY_BUTTON_RIGHT_SHOULDER
-		
-		"button_l2":
-			return JOY_BUTTON_LEFT_STICK  # L2/LT trigger (as button)
-		
-		"button_r2":
-			return JOY_BUTTON_RIGHT_STICK  # R2/RT trigger (as button)
-		
-		_:
-			return -1
-
+	dir = dir.normalized()
+	var start_pos = global_position
+	var end_pos = start_pos + dir * distance
+	var elapsed = 0.0
+	
+	while elapsed < duration:
+		elapsed += delta
+		var t = elapsed / duration
+		global_position = start_pos.lerp(end_pos, t)
+		await get_tree().process_frame
 
 
 func start_defence(anim_name: String) -> void:
@@ -259,7 +228,6 @@ func start_attack(anim_name: String) -> void:
 	_audio_player.stream = sound_punch
 	_audio_player.play()
 
-
 func _on_animation_finished(anim_name: String) -> void:
 	if anim_name == ACTIONS["MIDDLE_PUNCH"]:
 		attacking = false
@@ -269,9 +237,10 @@ func _on_animation_finished(anim_name: String) -> void:
 		defencing = false
 	if anim_name == ACTIONS["LOW_SHIELD"]:
 		defencing = false
+	if anim_name == ACTIONS["SLIDE"]:
+		sliding = false
 	
 	animation_player.play("Idle")
-
 
 # --- ANIMATION NOTIFIES ---
 func _enable_middle_hitbox() -> void:
@@ -298,6 +267,12 @@ func _enable_low_hurtbox() -> void:
 func _disable_low_hurtbox() -> void:
 	hit_box_collision_low.disabled = true
 
+func _enable_all_collisions() -> void:
+	collision.disabled = false
+
+func _disable_all_collisions() -> void:
+	collision.disabled = true
+
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	hp -= 10
 	
@@ -320,6 +295,5 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 	particles.emitting = true
 	particles.emitting = false
 
-
 func _on_hitbox_body_entered(body: Node2D) -> void:
-	pass # Replace with function body.
+	pass

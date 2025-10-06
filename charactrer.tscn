@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://ch0qb6l11mndf"]
+[gd_scene load_steps=17 format=3 uid="uid://ch0qb6l11mndf"]
 
 [ext_resource type="Texture2D" uid="uid://cdyobknijedwt" path="res://Piss.png" id="1_c783h"]
 [ext_resource type="Script" uid="uid://c33vdws42nc8r" path="res://charactrer.gd" id="1_ehx2i"]
@@ -42,7 +42,7 @@ tracks/1/path = NodePath("..")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.25, 0.5),
+"times": PackedFloat32Array(0.5, 0.75),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -106,7 +106,7 @@ tracks/1/path = NodePath("..")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.25, 0.5),
+"times": PackedFloat32Array(0.5, 0.75),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -180,6 +180,39 @@ tracks/0/keys = {
 "values": [0]
 }
 
+[sub_resource type="Animation" id="Animation_3y8u1"]
+resource_name = "Slide"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [24, 25, 26, 27]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"_disable_all_collisions"
+}, {
+"args": [],
+"method": &"_enable_all_collisions"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_s24tm"]
 _data = {
 &"Idle": SubResource("Animation_c783h"),
@@ -188,7 +221,8 @@ _data = {
 &"Middle_Punch": SubResource("Animation_ehx2i"),
 &"Middle_Shield": SubResource("Animation_3qdkd"),
 &"Moving": SubResource("Animation_s24tm"),
-&"RESET": SubResource("Animation_6sw42")
+&"RESET": SubResource("Animation_6sw42"),
+&"Slide": SubResource("Animation_3y8u1")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ehx2i"]
@@ -201,23 +235,24 @@ height = 22.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s24tm"]
 radius = 1.0
-height = 10.0
+height = 14.000001
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6sw42"]
 radius = 1.0
-height = 8.000002
+height = 22.79876
 
 [node name="Charactrer" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_ehx2i")
+start_facing_right = false
 
 [node name="SpriteBox" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("1_c783h")
 offset = Vector2(6, 0)
 hframes = 4
-vframes = 6
+vframes = 7
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SpriteBox"]
 libraries = {
@@ -246,14 +281,14 @@ collision_layer = 4
 collision_mask = 8
 
 [node name="MiddleCollisionShape" type="CollisionShape2D" parent="HurtBox"]
-position = Vector2(15, -9)
+position = Vector2(13, -9)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_s24tm")
 debug_color = Color(0.98039216, 0, 0.39607844, 0.41960785)
 
 [node name="LowCollisionShape" type="CollisionShape2D" parent="HurtBox"]
-position = Vector2(16, 22)
-rotation = 1.5707964
+position = Vector2(12.000001, 14)
+rotation = 2.500958
 shape = SubResource("CapsuleShape2D_6sw42")
 debug_color = Color(0.978924, 0, 0.3960697, 0.41960785)
 
@@ -271,6 +306,21 @@ initial_velocity_min = 100.0
 initial_velocity_max = 200.0
 anim_speed_min = 50.0
 anim_speed_max = 70.0
+
+[node name="CPUTrailsParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 20
+texture = ExtResource("3_rbjh3")
+lifetime = 0.3
+one_shot = true
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(1, 10)
+direction = Vector2(-1, 0)
+spread = 2.0
+gravity = Vector2(980, 0)
+linear_accel_max = 55.67
+anim_offset_max = 0.197
 
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

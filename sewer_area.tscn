@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://6vkct5x1ewon"]
+[gd_scene load_steps=17 format=3 uid="uid://6vkct5x1ewon"]
 
 [ext_resource type="Texture2D" uid="uid://fy81hjip1l20" path="res://forest_background.png" id="1_300v3"]
 [ext_resource type="Script" uid="uid://j0isvubxi5bs" path="res://sewer_area.gd" id="1_hxwao"]
@@ -11,14 +11,13 @@
 [ext_resource type="PackedScene" uid="uid://cxyse0k4udoys" path="res://progress_bars.tscn" id="6_ic3xi"]
 [ext_resource type="Texture2D" uid="uid://b6vkj56qagvtp" path="res://poop_particle.png" id="9_10xsc"]
 [ext_resource type="PackedScene" uid="uid://din2yvh8x80wn" path="res://winner_screen.tscn" id="9_vom5e"]
+[ext_resource type="PackedScene" uid="uid://n73pchww1adc" path="res://menu.tscn" id="12_7cb6s"]
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_v45da"]
-a = Vector2(370, 0)
-b = Vector2(370, 200)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_10xsc"]
+size = Vector2(308, 202)
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_ic3xi"]
-a = Vector2(-50, 0)
-b = Vector2(-50, 200)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7cb6s"]
+size = Vector2(318, 202)
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_3yd3t"]
 a = Vector2(-50, 0)
@@ -30,6 +29,7 @@ b = Vector2(370, 200)
 
 [node name="SewerArea" type="Node2D"]
 script = ExtResource("1_hxwao")
+game_mode = 0
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 offset = Vector2(160, 50)
@@ -87,14 +87,13 @@ position = Vector2(20, 120)
 scale = Vector2(3, 3)
 winner_script = NodePath("../CanvasLayer/WinnerScreen")
 character_name = "Poop"
-controller_device = 1
+start_facing_right = true
 
 [node name="Poop" parent="." node_paths=PackedStringArray("winner_script") instance=ExtResource("5_v45da")]
 position = Vector2(270, 120)
 scale = Vector2(3, 3)
 winner_script = NodePath("../CanvasLayer/WinnerScreen")
 character_name = "Piss"
-start_facing_right = false
 
 [node name="SpriteBox" parent="Poop" index="0"]
 texture = ExtResource("6_3yd3t")
@@ -106,11 +105,13 @@ texture = ExtResource("9_10xsc")
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Borders"]
-shape = SubResource("SegmentShape2D_v45da")
+position = Vector2(524, 100)
+shape = SubResource("RectangleShape2D_10xsc")
 debug_color = Color(0.12662402, 0.63510716, 0.36427546, 0.41960785)
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Borders"]
-shape = SubResource("SegmentShape2D_ic3xi")
+position = Vector2(-209, 100)
+shape = SubResource("RectangleShape2D_7cb6s")
 debug_color = Color(0.1254902, 0.63529414, 0.3647059, 0.41960785)
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Borders"]
@@ -130,6 +131,10 @@ character2 = NodePath("../../Poop")
 
 [node name="WinnerScreen" parent="CanvasLayer" instance=ExtResource("9_vom5e")]
 
+[node name="Menu" parent="CanvasLayer" node_paths=PackedStringArray("main_scene") instance=ExtResource("12_7cb6s")]
+main_scene = NodePath("../..")
+
 [editable path="Piss"]
 [editable path="Poop"]
 [editable path="CanvasLayer/ProgressBars"]
+[editable path="CanvasLayer/Menu"]
