@@ -4,7 +4,7 @@ extends Control
 @onready var timer_label: Label = $VBoxContainer/TimerLabel
 
 @export var countdown_time: float = 6.0
-@export var game_scene_path: String = "res://sewer_area.tscn"
+@export var game_scene_path: String = "res://resources/sewer_area.tscn"
 
 var time_remaining: float = 0.0
 var has_restarted: bool = false

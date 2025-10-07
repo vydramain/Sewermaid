@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://din2yvh8x80wn"]
 
-[ext_resource type="Script" uid="uid://cypfin42iwpt3" path="res://winner_screen.gd" id="1_1hha7"]
-[ext_resource type="FontFile" uid="uid://def20ua3dv3c1" path="res://Jersey10-Regular.ttf" id="2_js40s"]
-[ext_resource type="LabelSettings" uid="uid://bay43ribrsmu7" path="res://pixel_label.tres" id="2_qol43"]
+[ext_resource type="Script" uid="uid://cypfin42iwpt3" path="res://resources/winner_screen.gd" id="1_1hha7"]
+[ext_resource type="FontFile" uid="uid://t1vo5jk2bru1" path="res://assets/fonts/Jersey10-Regular.ttf" id="2_js40s"]
+[ext_resource type="LabelSettings" uid="uid://bay43ribrsmu7" path="res://resouces_custom/pixel_label.tres" id="2_qol43"]
 
 [node name="WinnerScreen" type="Control"]
 layout_mode = 3
@@ -34,6 +34,7 @@ horizontal_alignment = 1
 
 [node name="TimerLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_js40s")
 label_settings = ExtResource("2_qol43")
 horizontal_alignment = 1
 vertical_alignment = 1

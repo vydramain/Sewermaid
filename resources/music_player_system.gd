@@ -1,8 +1,8 @@
 extends Node
 
 const dict = {
-	"pp_cw_amen10_160": preload("res://pp_cw_amen10_160.ogg"),
-	"pa_cw_amen10_160": preload("res://pa_cw_amen10_160.ogg"),
+	"pp_cw_amen10_160": preload("res://assets/music/pp_cw_amen10_160.ogg"),
+	"pa_cw_amen10_160": preload("res://assets/music/pa_cw_amen10_160.ogg"),
 }
 
 const next_state = {

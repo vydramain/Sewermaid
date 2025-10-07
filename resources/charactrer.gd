@@ -1,9 +1,9 @@
 # Character.gd (Refactored)
 extends CharacterBody2D
 
-@onready var sound_death = preload("res://pp_death.ogg")
-@onready var sound_impact = preload("res://pp_impact.ogg")
-@onready var sound_punch = preload("res://pp_punch.mp3")
+@onready var sound_death = preload("res://assets/music/pp_death.ogg")
+@onready var sound_impact = preload("res://assets/music/pp_impact.ogg")
+@onready var sound_punch = preload("res://assets/music/pp_punch.mp3")
 
 @onready var sprite = $SpriteBox
 @onready var animation_player = $SpriteBox/AnimationPlayer

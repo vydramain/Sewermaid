@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://n73pchww1adc"]
 
-[ext_resource type="FontFile" uid="uid://def20ua3dv3c1" path="res://Jersey10-Regular.ttf" id="1_lti8b"]
-[ext_resource type="Script" uid="uid://cm0h5ed3ugmuk" path="res://menu.gd" id="2_mae5d"]
-[ext_resource type="Texture2D" uid="uid://fy81hjip1l20" path="res://forest_background.png" id="2_ouk20"]
+[ext_resource type="FontFile" uid="uid://t1vo5jk2bru1" path="res://assets/fonts/Jersey10-Regular.ttf" id="1_lti8b"]
+[ext_resource type="Script" uid="uid://cm0h5ed3ugmuk" path="res://resources/menu.gd" id="2_mae5d"]
+[ext_resource type="Texture2D" uid="uid://2x370vo5fh6k" path="res://assets/textures/forest_background.png" id="2_ouk20"]
 
 [sub_resource type="Theme" id="Theme_ouk20"]
 default_font = ExtResource("1_lti8b")

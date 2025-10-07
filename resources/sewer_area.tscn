@@ -1,17 +1,17 @@
 [gd_scene load_steps=17 format=3 uid="uid://6vkct5x1ewon"]
 
-[ext_resource type="Texture2D" uid="uid://fy81hjip1l20" path="res://forest_background.png" id="1_300v3"]
-[ext_resource type="Script" uid="uid://j0isvubxi5bs" path="res://sewer_area.gd" id="1_hxwao"]
-[ext_resource type="Texture2D" uid="uid://beatv3wcj6dnn" path="res://forest_frontend.png" id="2_v45da"]
-[ext_resource type="Texture2D" uid="uid://diux2a0qxu47l" path="res://fog.png" id="3_ic3xi"]
-[ext_resource type="Texture2D" uid="uid://be1fhrkus4lig" path="res://Sewer.png" id="4_v45da"]
-[ext_resource type="Script" uid="uid://bgxgjlv60n1ol" path="res://camera_2d.gd" id="5_mqtxy"]
-[ext_resource type="PackedScene" uid="uid://ch0qb6l11mndf" path="res://charactrer.tscn" id="5_v45da"]
-[ext_resource type="Texture2D" uid="uid://12gevaivi387" path="res://Poop.png" id="6_3yd3t"]
-[ext_resource type="PackedScene" uid="uid://cxyse0k4udoys" path="res://progress_bars.tscn" id="6_ic3xi"]
-[ext_resource type="Texture2D" uid="uid://b6vkj56qagvtp" path="res://poop_particle.png" id="9_10xsc"]
-[ext_resource type="PackedScene" uid="uid://din2yvh8x80wn" path="res://winner_screen.tscn" id="9_vom5e"]
-[ext_resource type="PackedScene" uid="uid://n73pchww1adc" path="res://menu.tscn" id="12_7cb6s"]
+[ext_resource type="Texture2D" uid="uid://2x370vo5fh6k" path="res://assets/textures/forest_background.png" id="1_300v3"]
+[ext_resource type="Script" uid="uid://j0isvubxi5bs" path="res://resources/sewer_area.gd" id="1_hxwao"]
+[ext_resource type="Texture2D" uid="uid://be3r23v5jah4m" path="res://assets/textures/forest_frontend.png" id="2_v45da"]
+[ext_resource type="Texture2D" uid="uid://dqvmvhoihsxf" path="res://assets/textures/fog.png" id="3_ic3xi"]
+[ext_resource type="Texture2D" uid="uid://do43whaldgogl" path="res://assets/textures/Sewer.png" id="4_v45da"]
+[ext_resource type="Script" uid="uid://bgxgjlv60n1ol" path="res://resources/camera_2d.gd" id="5_mqtxy"]
+[ext_resource type="PackedScene" uid="uid://ch0qb6l11mndf" path="res://resources/charactrer.tscn" id="5_v45da"]
+[ext_resource type="PackedScene" uid="uid://cxyse0k4udoys" path="res://resources/progress_bars.tscn" id="6_ic3xi"]
+[ext_resource type="Texture2D" uid="uid://synr6qm8njfs" path="res://assets/textures/Poop.png" id="8_8a0qq"]
+[ext_resource type="Texture2D" uid="uid://celxc7irpmxko" path="res://assets/textures/poop_particle.png" id="9_10xsc"]
+[ext_resource type="PackedScene" uid="uid://din2yvh8x80wn" path="res://resources/winner_screen.tscn" id="9_vom5e"]
+[ext_resource type="PackedScene" uid="uid://n73pchww1adc" path="res://resources/menu.tscn" id="12_7cb6s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_10xsc"]
 size = Vector2(308, 202)
@@ -89,6 +89,9 @@ winner_script = NodePath("../CanvasLayer/WinnerScreen")
 character_name = "Poop"
 start_facing_right = true
 
+[node name="CPUTrailsParticles2D" parent="Piss" index="5"]
+texture = null
+
 [node name="Poop" parent="." node_paths=PackedStringArray("winner_script") instance=ExtResource("5_v45da")]
 position = Vector2(270, 120)
 scale = Vector2(3, 3)
@@ -96,10 +99,13 @@ winner_script = NodePath("../CanvasLayer/WinnerScreen")
 character_name = "Piss"
 
 [node name="SpriteBox" parent="Poop" index="0"]
-texture = ExtResource("6_3yd3t")
+texture = ExtResource("8_8a0qq")
 
 [node name="CPUParticles2D" parent="Poop" index="4"]
 texture = ExtResource("9_10xsc")
+
+[node name="CPUTrailsParticles2D" parent="Poop" index="5"]
+texture = null
 
 [node name="Borders" type="StaticBody2D" parent="."]
 collision_mask = 3
@@ -129,10 +135,21 @@ size_flags_horizontal = 1
 character1 = NodePath("../../Piss")
 character2 = NodePath("../../Poop")
 
+[node name="PissProgressBar" parent="CanvasLayer/ProgressBars" index="0"]
+texture_under = null
+texture_progress = null
+
+[node name="PoopProgressBar" parent="CanvasLayer/ProgressBars" index="1"]
+texture_under = null
+texture_progress = null
+
 [node name="WinnerScreen" parent="CanvasLayer" instance=ExtResource("9_vom5e")]
 
 [node name="Menu" parent="CanvasLayer" node_paths=PackedStringArray("main_scene") instance=ExtResource("12_7cb6s")]
 main_scene = NodePath("../..")
+
+[node name="TextureRect" parent="CanvasLayer/Menu" index="0"]
+texture = null
 
 [editable path="Piss"]
 [editable path="Poop"]

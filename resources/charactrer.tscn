@@ -1,8 +1,8 @@
 [gd_scene load_steps=17 format=3 uid="uid://ch0qb6l11mndf"]
 
-[ext_resource type="Texture2D" uid="uid://cdyobknijedwt" path="res://Piss.png" id="1_c783h"]
-[ext_resource type="Script" uid="uid://c33vdws42nc8r" path="res://charactrer.gd" id="1_ehx2i"]
-[ext_resource type="Texture2D" uid="uid://c3eck8v4p23ht" path="res://piss_particle.png" id="3_rbjh3"]
+[ext_resource type="Texture2D" uid="uid://cqgwl40gg7l8y" path="res://assets/textures/Piss.png" id="1_c783h"]
+[ext_resource type="Script" uid="uid://c33vdws42nc8r" path="res://resources/charactrer.gd" id="1_ehx2i"]
+[ext_resource type="Texture2D" uid="uid://3yhsxrfmil2n" path="res://assets/textures/piss_particle.png" id="3_rbjh3"]
 
 [sub_resource type="Animation" id="Animation_c783h"]
 resource_name = "Idle"
