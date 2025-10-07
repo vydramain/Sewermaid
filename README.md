@@ -3,7 +3,7 @@
 **Sewermaid** is a Godot-based action-arcade game (jam project) where you play as a sewer collector cleaning up a nasty underground mess.  
 Fight off toxic waste, collect valuables, avoid hazards, and see how long you can survive.
 
-![sewer_simple.png](./sewer_simple.png)
+![sewer_simple.png](./assets/textures/sewer_simple.png)
 
 ---
 
@@ -25,7 +25,7 @@ Key features:
 
 ## Controls
 
-![Controls.png](./Controls.png)
+![Controls.png](./assets/textures/Controls.png)
 
 ---
 
