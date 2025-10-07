@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://cxyse0k4udoys"]
 
-[ext_resource type="Texture2D" uid="uid://darwk5oiro4l6" path="res://piss_health_bar_under.png" id="1_62e2m"]
-[ext_resource type="Script" uid="uid://cksy2diqen6b8" path="res://progress_bars.gd" id="1_ee4bf"]
-[ext_resource type="Texture2D" uid="uid://bxq4d38m13ocu" path="res://piss_health_bar_progress.png" id="2_qtu10"]
-[ext_resource type="Texture2D" uid="uid://dwg7kllpfc6nw" path="res://poop_health_bar_progress.png" id="3_qtu10"]
+[ext_resource type="Texture2D" uid="uid://dislcqafxmnyl" path="res://assets/textures/piss_health_bar_under.png" id="1_62e2m"]
+[ext_resource type="Script" uid="uid://cksy2diqen6b8" path="res://resources/progress_bars.gd" id="1_ee4bf"]
+[ext_resource type="Texture2D" uid="uid://b58x7ngw6roxe" path="res://assets/textures/piss_health_bar_progress.png" id="2_qtu10"]
+[ext_resource type="Texture2D" uid="uid://bmwpjn1ecx8j4" path="res://assets/textures/poop_health_bar_progress.png" id="3_qtu10"]
 
 [node name="ProgressBars" type="Control"]
 layout_mode = 3
