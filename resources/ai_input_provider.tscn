@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://rc4bjschgdg7"]
 
-[ext_resource type="Script" uid="uid://bjqhwux18m7op" path="res://resources/ai_input_provider.gd" id="1_64u2f"]
+[ext_resource type="Script" uid="uid://bjqhwux18m7op" path="res://ai_input_provider.gd" id="1_64u2f"]
 
 [node name="AIInputProvider" type="Node2D"]
 script = ExtResource("1_64u2f")

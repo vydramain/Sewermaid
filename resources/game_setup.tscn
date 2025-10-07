@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bjoc4uma53g4l"]
 
-[ext_resource type="Script" uid="uid://d32cfsn0hj46f" path="res://assets/textures/game_setup.gd" id="1_wdvon"]
+[ext_resource type="Script" uid="uid://d32cfsn0hj46f" path="res://game_setup.gd" id="1_wdvon"]
 
 [node name="GameSetup" type="Node2D"]
 script = ExtResource("1_wdvon")
