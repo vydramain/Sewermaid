@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://6vkct5x1ewon"]
+[gd_scene load_steps=18 format=3 uid="uid://6vkct5x1ewon"]
 
 [ext_resource type="Texture2D" uid="uid://2x370vo5fh6k" path="res://assets/textures/forest_background.png" id="1_300v3"]
 [ext_resource type="Script" uid="uid://j0isvubxi5bs" path="res://resources/sewer_area.gd" id="1_hxwao"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://celxc7irpmxko" path="res://assets/textures/poop_particle.png" id="9_10xsc"]
 [ext_resource type="PackedScene" uid="uid://din2yvh8x80wn" path="res://resources/winner_screen.tscn" id="9_vom5e"]
 [ext_resource type="PackedScene" uid="uid://n73pchww1adc" path="res://resources/menu.tscn" id="12_7cb6s"]
+[ext_resource type="PackedScene" uid="uid://2jnh5u3m0ym2" path="res://avatar.tscn" id="13_od6ra"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_10xsc"]
 size = Vector2(308, 202)
@@ -148,10 +149,11 @@ texture_progress = null
 [node name="Menu" parent="CanvasLayer" node_paths=PackedStringArray("main_scene") instance=ExtResource("12_7cb6s")]
 main_scene = NodePath("../..")
 
-[node name="TextureRect" parent="CanvasLayer/Menu" index="0"]
-texture = null
+[node name="Avatar" parent="CanvasLayer" node_paths=PackedStringArray("main_scene") instance=ExtResource("13_od6ra")]
+main_scene = NodePath("../..")
 
 [editable path="Piss"]
 [editable path="Poop"]
 [editable path="CanvasLayer/ProgressBars"]
 [editable path="CanvasLayer/Menu"]
+[editable path="CanvasLayer/Avatar"]

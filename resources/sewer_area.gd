@@ -4,6 +4,7 @@ extends Node2D
 @onready var player2 = $Poop
 
 @onready var menu = $CanvasLayer/Menu
+@onready var avatar = $CanvasLayer/Avatar
 
 enum GameMode {
 	TWO_PLAYERS,
@@ -12,6 +13,7 @@ enum GameMode {
 }
 
 @export var game_mode: GameMode = GameMode.PLAYER_VS_AI
+@export var player_choose: String = "Piss"
 @export var ai_difficulty: float = 0.5
 @export var ai_aggression: float = 0.6
 
@@ -27,7 +29,7 @@ func run_p_vs_p() -> void:
 func run_p_vs_ai() -> void:
 	game_mode = GameMode.PLAYER_VS_AI
 	menu.visible = false
-	setup_game()
+	avatar.visible = true
 
 func run_ai_vs_ai() -> void:
 	game_mode = GameMode.AI_VS_AI
@@ -35,6 +37,9 @@ func run_ai_vs_ai() -> void:
 	setup_game()
 
 func setup_game() -> void:
+	menu.visible = false
+	avatar.visible = false
+	
 	match game_mode:
 		GameMode.TWO_PLAYERS:
 			setup_two_players()
@@ -53,11 +58,12 @@ func setup_two_players() -> void:
 	print("Game Mode: Two Players")
 
 func setup_player_vs_ai() -> void:
-	# Player 1 uses controller 0
-	player1.set_controller_input(1)
-	
-	# Player 2 is AI
-	player2.set_ai_input(player1, ai_difficulty, ai_aggression)
+	if player_choose == "piss":
+		player1.set_controller_input(0)
+		player2.set_ai_input(player1, ai_difficulty, ai_aggression)
+	else:
+		player1.set_ai_input(player2, ai_difficulty, ai_aggression)
+		player2.set_controller_input(0)
 	
 	print("Game Mode: Player vs AI")
 

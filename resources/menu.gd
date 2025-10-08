@@ -1,6 +1,7 @@
 extends Control
 
 @export var main_scene: Node2D = null
+@export var avatar: Control = null
 
 func _on_player_vs_player_pressed() -> void:
 	if main_scene != null and main_scene.has_method("run_p_vs_p"):
