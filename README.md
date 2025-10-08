@@ -7,39 +7,25 @@ Fight off toxic waste, collect valuables, avoid hazards, and see how long you ca
 
 ---
 
-## Game Concept
+### Another Pointless Internet Argument
 
-> You are the Sewermaid — the last hope for subterranean sanitation.  
-> Dive into the depths, mop up filth, fend off creatures, and reclaim the underground from biohazards.
+I present to you a unique fighting game that can be used in any controversial situation! You have time and energy but no arguments? Try our new **fight of shit and urine**. You and your opponent take control of your preferred side and start battling to prove you're right! Of course, your argument will end in nothing, as everything gets flushed down the drain and dissolves into oblivion.
 
-From the Ludum Dare 58 jam concept **Sewer Collector** (your original description), Sewermaid expands on the idea: more polished visuals, more enemy types, better feedback, and persistent scoring.
+### But I Don’t Have an Opponent Among My Friends
 
-Key features:
-- Top-down or side view (depending on level) gameplay.
-- Cleanse the sewers by collecting waste and avoiding hazards.
-- Enemies and evolving difficulty.
-- Power-ups, obstacles, and environmental challenges.
-- Stylized pixel / minimal art aesthetic (fonts, textures, etc included in repo).
+If you don’t have friends or don’t want to hurt them during the fight, there’s a mode where you can beat up a scripted dummy, just to feel better.
+
+### I’m Too Lazy to Prove Anything
+
+In that case, try our unique mode where two scripted dummies fight for you, allowing you to waste your time meaninglessly. This mode can also be used if you can’t make a choice. Just imagine that each avatar represents a decision you’re struggling with.
 
 ---
 
 ## Controls
 
+Here’s a scheme for **gamepad controls**:
+
 ![Controls.png](./assets/textures/Controls.png)
-
----
-
-## Structure / Contents
-
-Here’s a high-level view of what’s in the repo (from what I saw):  
-- `.editorconfig`, `.gitattributes`, `.gitignore`  
-- Asset folders: images (PNG, ASE), fonts (TTF), sound/music files  
-- Godot files: `.gd` scripts, `.tscn` scenes, `project.godot`, `export_presets.cfg`  
-- Scenes & systems: menu, camera, input providers, character, particle, etc.  
-- UI / HUD: health bars, progress bars, etc  
-- Audio: effects, background music, environmental sound  
-
-You’ll want to flesh this out (modules, which script handles what, dependencies) as you refine.
 
 ---
 
@@ -52,3 +38,4 @@ To run/build the project:
    ```bash
    git clone https://github.com/vydramain/Sewermaid.git
    cd Sewermaid
+   ```
